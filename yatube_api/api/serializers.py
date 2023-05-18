@@ -2,11 +2,11 @@ from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
-
 from posts.models import Comment, Follow, Group, Post, User
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    """Сериализатор для групп."""
 
     class Meta:
         fields = '__all__'
@@ -14,16 +14,16 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """Сериализатор для постов."""
     author = SlugRelatedField(slug_field='username', read_only=True)
-# в этом файле сериализаторов использовала __all__, как ты и говорил
-# но ведь в теории говорилось, что лучше в данном случае объявлять явно?
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'text', 'pub_date', 'author', 'image', 'group')
         model = Post
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """Сериализатор для комментариев."""
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
@@ -35,6 +35,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
+    """Сериализатор для подписок."""
     user = SlugRelatedField(
         read_only=True,
         slug_field='username',

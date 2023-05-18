@@ -13,11 +13,13 @@ from .serializers import (
 
 
 class GroupViewSet(ReadOnlyModelViewSet):
+    """Вьюсет для групп, только для получения данных."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
 class PostViewSet(ModelViewSet):
+    """Вьюсет для постов."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsAuthorOrReadOnly,)
@@ -28,6 +30,7 @@ class PostViewSet(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
+    """Вьюсет для комментариев."""
     serializer_class = CommentSerializer
     permission_classes = (IsAuthorOrReadOnly,)
 
@@ -41,13 +44,10 @@ class CommentViewSet(ModelViewSet):
         serializer.save(author=self.request.user, post=self.get_post())
 
 
-# здесь взяла из той документации, которую ты отправлял. проверь тщательно,
-# пожалуйста, так как я не уверена, что всё правильно
-# https://github.com/encode/django-rest-framework/blob/7bebe9772488fcf67949e1221e70af642ed0cb74/rest_framework/mixins.py
-# нужно ли выносить аргументы этого класса в отдельный файл в отдельный класс?
 class FollowViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     viewsets.GenericViewSet):
+    """Вьюсет для подписок."""
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
     pagination_class = LimitOffsetPagination
